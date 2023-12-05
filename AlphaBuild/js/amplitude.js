@@ -52,18 +52,17 @@ function sendEventLogic(eventName, requestNumber, eventProperty){
 					]
 				}
 
-			fetch('https://better-space-api.herokuapp.com/api/game/httpApi', {
-				method: 'POST',
-				headers: {
-					'Accept': '*/*',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(myBody)
-			})
-				.then(response => _lastRequestNumber++)
-				.then(response => console.log("event successfully sent: " + eventName));
-			//.then(response => response.json())
-			//.then(response => console.log(JSON.stringify(response)));
+			// fetch('https://better-space-api.herokuapp.com/api/game/httpApi', {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Accept': '*/*',
+			// 		'Content-Type': 'application/json'
+			// 	},
+			// 	body: JSON.stringify(myBody)
+			// })
+			// 	.then(response => _lastRequestNumber++)
+			// 	.then(response => console.log("event successfully sent: " + eventName));
+
 		}
 	}
 
