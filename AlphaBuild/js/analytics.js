@@ -46,37 +46,37 @@ function getAndSaveClientId() {
 	}));
 }
 
-async function getAndSaveClientIdAsync() {
-	clientId = await getClientIdAsync();
-	console.log('getAndSaveClientIdAsync: ' + clientId);
-}
+// async function getAndSaveClientIdAsync() {
+// 	clientId = await getClientIdAsync();
+// 	console.log('getAndSaveClientIdAsync: ' + clientId);
+// }
 
-function getSavedClientId() {
-	return clientId;
-}
-
-function startYandexAnalytics() {
-	(function (m, e, t, r, i, k, a) {
-		m[i] = m[i] || function () {
-			(m[i].a = m[i].a || []).push(arguments)
-		};
-		m[i].l = 1 * new Date();
-		for (var j = 0; j < document.scripts.length; j++) {
-			if (document.scripts[j].src === r) {
-				return;
-			}
-		}
-		k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-	})
-	(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-	ym(93348023, "init", {
-		clickmap: true,
-		trackLinks: true,
-		accurateTrackBounce: true,
-		webvisor: true
-	});
-}
+// function getSavedClientId() {
+// 	return clientId;
+// }
+//
+// function startYandexAnalytics() {
+// 	(function (m, e, t, r, i, k, a) {
+// 		m[i] = m[i] || function () {
+// 			(m[i].a = m[i].a || []).push(arguments)
+// 		};
+// 		m[i].l = 1 * new Date();
+// 		for (var j = 0; j < document.scripts.length; j++) {
+// 			if (document.scripts[j].src === r) {
+// 				return;
+// 			}
+// 		}
+// 		k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+// 	})
+// 	(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+//
+// 	ym(93348023, "init", {
+// 		clickmap: true,
+// 		trackLinks: true,
+// 		accurateTrackBounce: true,
+// 		webvisor: true
+// 	});
+// }
 
 // function getSessionId() {
 // let sessionId = sessionStorage.getItem('sessionId');
@@ -89,10 +89,10 @@ function startYandexAnalytics() {
 // return sessionId;
 // }
 
-function getCurrentSessionId() {
-	console.log('getCurrentSessionId: ' + currentSessionId);
-	return currentSessionId;
-}
+// function getCurrentSessionId() {
+// 	console.log('getCurrentSessionId: ' + currentSessionId);
+// 	return currentSessionId;
+// }
 
 function generateSessionId() {
 	var currentDate = new Date().getTime();
@@ -127,18 +127,18 @@ function waitForAnalytics(callback) {
 		}, 100);
 	}
 }
-function trackProgress(progress) {
-	const currentProgress = Math.floor(progress * 100);
-
-	if (currentProgress >= lastLoggedProgress + 50 || currentProgress === 100) {
-		console.log(`Create_Unity_Instance_Progress: ${currentProgress}%`);
-
-		progressProperty = {
-			"Progress": currentProgress,
-			"IndexedDB_Available": indexedDB_Available,
-		};
-		sendEvent(GameProgressEnum.Game_Create_Unity_Instance, progressProperty);
-
-		lastLoggedProgress = currentProgress;
-	}
-}
+// function trackProgress(progress) {
+// 	const currentProgress = Math.floor(progress * 100);
+//
+// 	if (currentProgress >= lastLoggedProgress + 50 || currentProgress === 100) {
+// 		console.log(`Create_Unity_Instance_Progress: ${currentProgress}%`);
+//
+// 		progressProperty = {
+// 			"Progress": currentProgress,
+// 			"IndexedDB_Available": indexedDB_Available,
+// 		};
+// 		sendEvent(GameProgressEnum.Game_Create_Unity_Instance, progressProperty);
+//
+// 		lastLoggedProgress = currentProgress;
+// 	}
+// }
