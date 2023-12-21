@@ -51,9 +51,9 @@ function getAndSaveClientId() {
 // 	console.log('getAndSaveClientIdAsync: ' + clientId);
 // }
 
-// function getSavedClientId() {
-// 	return clientId;
-// }
+function getSavedClientId() {
+	return clientId;
+}
 //
 // function startYandexAnalytics() {
 // 	(function (m, e, t, r, i, k, a) {
