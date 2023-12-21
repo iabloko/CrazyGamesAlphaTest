@@ -1,3 +1,4 @@
+let nickname = "";
 
 // function checkIfMobile(){
 // 	var isMobile = false; //initiate as false
@@ -19,6 +20,12 @@ function detectMobileDevice() {
     return mobileRegex.test(userAgent) || isIpadOnIOS13;
 }
 
+function SetNickname(nick)
+{
+    if (nick !== null){
+        nickname = nick;
+    }
+}
 
 function checkBrowser() {
     var check = false; //initiate as false
