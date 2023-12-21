@@ -77,6 +77,11 @@ function initializeBasedEventProperty() {
 	result = parser.getResult();
 	console.log("Result: " + result);
 
+	let currentUrl = window.location.href;
+	if (!currentUrl) {
+		currentUrl = "URL не доступен";
+	}
+
 	return {
 		"Browser": result && result.browser ? result.browser.name : "unknown",
 		"Browser_Version": result && result.browser ? result.browser.version : "unknown",
@@ -86,5 +91,7 @@ function initializeBasedEventProperty() {
 		"WebGL_Version": (document.createElement("canvas").getContext("webgl2") !== null) ? 'WebGL2' : 'WebGL1',
 		"IndexedDB_Available": indexedDB_Available,
 		"DeviceType": deviceProperty,
+		"Referrer_URL": document.referrer || "direct access or referrer not set by previous page",
+		"Current_URL": currentUrl
 	};
 }

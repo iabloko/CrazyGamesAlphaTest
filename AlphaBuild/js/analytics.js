@@ -94,11 +94,7 @@ function getAndSaveClientId() {
 // 	return currentSessionId;
 // }
 
-function generateSessionId() {
-	var currentDate = new Date().getTime();
-	var sessionId = currentDate * 1000000 + Math.floor(Math.random() * 1000000);
-	return sessionId;
-}
+
 
 function initAnalytics() {
 	console.log("initAnalytics");
@@ -113,6 +109,12 @@ function initAnalytics() {
 	deviceProperty = detectMobileDevice();
 	basedEventProperty = initializeBasedEventProperty();
 	sendEvent(Hello_World, basedEventProperty);
+}
+
+function generateSessionId() {
+	var currentDate = new Date().getTime();
+	var sessionId = currentDate * 1000000 + Math.floor(Math.random() * 1000000);
+	return sessionId;
 }
 
 function waitForAnalytics(callback) {
