@@ -6,93 +6,108 @@ const gaID = 'G-HWSS0NKVPT';
 initAnalytics();
 
 function getClientId(callback) {
-	console.log('getClientId');
+    console.log('getClientId');
 
-	const savedUuid = localStorage.getItem('userId');
+    const savedUuid = localStorage.getItem('userId');
 
-	if (savedUuid !== null) {
-		console.log('There is saved client id in local storage: ' + savedUuid);
-		callback(savedUuid);
-	} else {
-		console.log('There is no saved client id in local storage. So try to get it from gtag.');
+    if (savedUuid !== null) {
+        console.log('There is saved client id in local storage: ' + savedUuid);
+        callback(savedUuid);
+    } else {
+        console.log('There is no saved client id in local storage. So try to get it from gtag.');
 
-		var gtagClientId = null;
+        var gtagClientId = null;
 
-		gtag('get', gaID, 'client_id',
-			function (clientId) {
-				gtagClientId = clientId;
-				console.log('Client ID from gtag: ' + clientId);
-				localStorage.setItem('userId', clientId);
-				callback(clientId);
-			});
+        gtag('get', gaID, 'client_id',
+            function (clientId) {
+                gtagClientId = clientId;
+                console.log('Client ID from gtag: ' + clientId);
+                localStorage.setItem('userId', clientId);
+                callback(clientId);
+            });
 
-		setTimeout(function () {
-			if (gtagClientId !== null) {
-				console.log('There is gtag client id: ' + gtagClientId);
-			} else {
-				const uuid = uuidv4();
-				console.log('There is no gtag client id. So generate new and save it: ' + uuid);
-				localStorage.setItem('userId', uuid);
-				callback(uuid);
-			}
-		}, 200);
-	}
+        setTimeout(function () {
+            if (gtagClientId !== null) {
+                console.log('There is gtag client id: ' + gtagClientId);
+            } else {
+                const uuid = uuidv4();
+                console.log('There is no gtag client id. So generate new and save it: ' + uuid);
+                localStorage.setItem('userId', uuid);
+                callback(uuid);
+            }
+        }, 200);
+    }
 }
 
 function getAndSaveClientId() {
-	getClientId((result => {
-		clientId = result;
-		console.log('getAndSaveClientId callback: ' + result);
-	}));
+    getClientId((result => {
+        clientId = result;
+        console.log('getAndSaveClientId callback: ' + result);
+    }));
 }
 
 async function getAndSaveClientIdAsync() {
-	clientId = await getClientIdAsync();
-	console.log('getAndSaveClientIdAsync: ' + clientId);
+    clientId = await getClientIdAsync();
+    console.log('getAndSaveClientIdAsync: ' + clientId);
 }
 
 function getSavedClientId() {
-	console.log('getSavedClientId: ' + clientId);
-	return clientId;
+    console.log('getSavedClientId: ' + clientId);
+    return clientId;
 }
 
 function startYandexAnalytics() {
-	(function (m, e, t, r, i, k, a) {
-		m[i] = m[i] || function () {
-			(m[i].a = m[i].a || []).push(arguments)
-		};
-		m[i].l = 1 * new Date();
-		for (var j = 0; j < document.scripts.length; j++) {
-			if (document.scripts[j].src === r) {
-				return;
-			}
-		}
-		k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-	})
-	(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    (function (m, e, t, r, i, k, a) {
+        m[i] = m[i] || function () {
+            (m[i].a = m[i].a || []).push(arguments)
+        };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+            if (document.scripts[j].src === r) {
+                return;
+            }
+        }
+        k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+    })
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-	ym(93348023, "init", {
-		clickmap: true,
-		trackLinks: true,
-		accurateTrackBounce: true,
-		webvisor: true
-	});
+    ym(93348023, "init", {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true
+    });
 }
 
-// function getSessionId() {
-// let sessionId = sessionStorage.getItem('sessionId');
-// if (!sessionId) {
-// sessionId = generateSessionId(); 
-// sessionStorage.setItem('sessionId', sessionId); 
-// }
+function getSessionId() {
+    let sessionId = sessionStorage.getItem('sessionId');
+    if (!sessionId) {
+        sessionId = generateSessionId();
+        sessionStorage.setItem('sessionId', sessionId);
+    }
 
-// console.log('getSessionId: ' + sessionId);
-// return sessionId;
-// }
+    console.log('getSessionId: ' + sessionId);
+    return sessionId;
+}
 
 function getCurrentSessionId() {
-	console.log('getCurrentSessionId: ' + currentSessionId);
-	return currentSessionId;
+    console.log('getCurrentSessionId: ' + currentSessionId);
+    return currentSessionId;
+}
+
+function initAnalytics() {
+    console.log("initAnalytics");
+    currentSessionId = generateSessionId();
+
+    waitForAnalytics(function () {
+        console.log('Google Analytics initialized!');
+        getAndSaveClientId();
+    });
+
+    indexedDB_Available = 'indexedDB' in window;
+    deviceProperty = detectMobileDevice();
+    basedEventProperty = initializeBasedEventProperty();
+    sendEvent(Hello_World, basedEventProperty);
 }
 
 function generateSessionId() {
@@ -101,68 +116,53 @@ function generateSessionId() {
 	return sessionId;
 }
 
-function initAnalytics() {
-	console.log("initAnalytics");
-	currentSessionId = generateSessionId();
-
-	waitForAnalytics(function () {
-		console.log('Google Analytics initialized!');
-		getAndSaveClientId();
-	});
-
-	indexedDB_Available ='indexedDB' in window;
-	deviceProperty = detectMobileDevice();
-	basedEventProperty = initializeBasedEventProperty();
-	sendEvent(Hello_World, basedEventProperty);
-}
-
 function waitForAnalytics(callback) {
-	console.log("waitForAnalytics");
-	if (typeof gtag !== 'undefined') {
-		setTimeout(function () {
-			callback();
-		}, 100);
-	} else {
-		setTimeout(function () {
-			waitForAnalytics(callback);
-		}, 100);
-	}
+    console.log("waitForAnalytics");
+    if (typeof gtag !== 'undefined') {
+        setTimeout(function () {
+            callback();
+        }, 100);
+    } else {
+        setTimeout(function () {
+            waitForAnalytics(callback);
+        }, 100);
+    }
 }
 
 function checkFileAvailability(url1, url2) {
-	const fetch1 = fetch(url1, {
-		method: 'GET'
-	}).then(response => {
-		if (!response.ok) {
-			throw new Error(`Failed to fetch ${url1}: ${response.statusText}`);
-		}
-		return response.statusText;
-	});
+    const fetch1 = fetch(url1, {
+        method: 'GET'
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to fetch ${url1}: ${response.statusText}`);
+        }
+        return response.statusText;
+    });
 
-	const fetch2 = fetch(url2, {
-		method: 'GET'
-	}).then(response => {
-		if (!response.ok) {
-			throw new Error(`Failed to fetch ${url2}: ${response.statusText}`);
-		}
-		return response.statusText;
-	});
+    const fetch2 = fetch(url2, {
+        method: 'GET'
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to fetch ${url2}: ${response.statusText}`);
+        }
+        return response.statusText;
+    });
 
-	return Promise.all([fetch1, fetch2]);
+    return Promise.all([fetch1, fetch2]);
 }
 
 function trackProgress(progress) {
-	const currentProgress = Math.floor(progress * 100);
+    const currentProgress = Math.floor(progress * 100);
 
-	if (currentProgress >= lastLoggedProgress + 50 || currentProgress === 100) {
-		console.log(`Create_Unity_Instance_Progress: ${currentProgress}%`);
+    if (currentProgress >= lastLoggedProgress + 50 || currentProgress === 100) {
+        console.log(`Create_Unity_Instance_Progress: ${currentProgress}%`);
 
-		progressProperty = {
-			"Progress": currentProgress,
-			"IndexedDB_Available": indexedDB_Available,
-		};
-		sendEvent(GameProgressEnum.Game_Create_Unity_Instance, progressProperty);
+        progressProperty = {
+            "Progress": currentProgress,
+            "IndexedDB_Available": indexedDB_Available,
+        };
+        sendEvent(GameProgressEnum.Game_Create_Unity_Instance, progressProperty);
 
-		lastLoggedProgress = currentProgress;
-	}
+        lastLoggedProgress = currentProgress;
+    }
 }
