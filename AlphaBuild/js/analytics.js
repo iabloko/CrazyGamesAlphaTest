@@ -46,37 +46,38 @@ function getAndSaveClientId() {
 	}));
 }
 
-// async function getAndSaveClientIdAsync() {
-// 	clientId = await getClientIdAsync();
-// 	console.log('getAndSaveClientIdAsync: ' + clientId);
-// }
+async function getAndSaveClientIdAsync() {
+	clientId = await getClientIdAsync();
+	console.log('getAndSaveClientIdAsync: ' + clientId);
+}
 
 function getSavedClientId() {
+	console.log('getSavedClientId: ' + clientId);
 	return clientId;
 }
-//
-// function startYandexAnalytics() {
-// 	(function (m, e, t, r, i, k, a) {
-// 		m[i] = m[i] || function () {
-// 			(m[i].a = m[i].a || []).push(arguments)
-// 		};
-// 		m[i].l = 1 * new Date();
-// 		for (var j = 0; j < document.scripts.length; j++) {
-// 			if (document.scripts[j].src === r) {
-// 				return;
-// 			}
-// 		}
-// 		k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-// 	})
-// 	(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-//
-// 	ym(93348023, "init", {
-// 		clickmap: true,
-// 		trackLinks: true,
-// 		accurateTrackBounce: true,
-// 		webvisor: true
-// 	});
-// }
+
+function startYandexAnalytics() {
+	(function (m, e, t, r, i, k, a) {
+		m[i] = m[i] || function () {
+			(m[i].a = m[i].a || []).push(arguments)
+		};
+		m[i].l = 1 * new Date();
+		for (var j = 0; j < document.scripts.length; j++) {
+			if (document.scripts[j].src === r) {
+				return;
+			}
+		}
+		k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+	})
+	(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+	ym(93348023, "init", {
+		clickmap: true,
+		trackLinks: true,
+		accurateTrackBounce: true,
+		webvisor: true
+	});
+}
 
 // function getSessionId() {
 // let sessionId = sessionStorage.getItem('sessionId');
@@ -89,12 +90,16 @@ function getSavedClientId() {
 // return sessionId;
 // }
 
-// function getCurrentSessionId() {
-// 	console.log('getCurrentSessionId: ' + currentSessionId);
-// 	return currentSessionId;
-// }
+function getCurrentSessionId() {
+	console.log('getCurrentSessionId: ' + currentSessionId);
+	return currentSessionId;
+}
 
-
+function generateSessionId() {
+	var currentDate = new Date().getTime();
+	var sessionId = currentDate * 1000000 + Math.floor(Math.random() * 1000000);
+	return sessionId;
+}
 
 function initAnalytics() {
 	console.log("initAnalytics");
@@ -104,17 +109,11 @@ function initAnalytics() {
 		console.log('Google Analytics initialized!');
 		getAndSaveClientId();
 	});
-	
+
 	indexedDB_Available ='indexedDB' in window;
 	deviceProperty = detectMobileDevice();
 	basedEventProperty = initializeBasedEventProperty();
 	sendEvent(Hello_World, basedEventProperty);
-}
-
-function generateSessionId() {
-	var currentDate = new Date().getTime();
-	var sessionId = currentDate * 1000000 + Math.floor(Math.random() * 1000000);
-	return sessionId;
 }
 
 function waitForAnalytics(callback) {
@@ -129,18 +128,41 @@ function waitForAnalytics(callback) {
 		}, 100);
 	}
 }
-// function trackProgress(progress) {
-// 	const currentProgress = Math.floor(progress * 100);
-//
-// 	if (currentProgress >= lastLoggedProgress + 50 || currentProgress === 100) {
-// 		console.log(`Create_Unity_Instance_Progress: ${currentProgress}%`);
-//
-// 		progressProperty = {
-// 			"Progress": currentProgress,
-// 			"IndexedDB_Available": indexedDB_Available,
-// 		};
-// 		sendEvent(GameProgressEnum.Game_Create_Unity_Instance, progressProperty);
-//
-// 		lastLoggedProgress = currentProgress;
-// 	}
-// }
+
+function checkFileAvailability(url1, url2) {
+	const fetch1 = fetch(url1, {
+		method: 'GET'
+	}).then(response => {
+		if (!response.ok) {
+			throw new Error(`Failed to fetch ${url1}: ${response.statusText}`);
+		}
+		return response.statusText;
+	});
+
+	const fetch2 = fetch(url2, {
+		method: 'GET'
+	}).then(response => {
+		if (!response.ok) {
+			throw new Error(`Failed to fetch ${url2}: ${response.statusText}`);
+		}
+		return response.statusText;
+	});
+
+	return Promise.all([fetch1, fetch2]);
+}
+
+function trackProgress(progress) {
+	const currentProgress = Math.floor(progress * 100);
+
+	if (currentProgress >= lastLoggedProgress + 50 || currentProgress === 100) {
+		console.log(`Create_Unity_Instance_Progress: ${currentProgress}%`);
+
+		progressProperty = {
+			"Progress": currentProgress,
+			"IndexedDB_Available": indexedDB_Available,
+		};
+		sendEvent(GameProgressEnum.Game_Create_Unity_Instance, progressProperty);
+
+		lastLoggedProgress = currentProgress;
+	}
+}
